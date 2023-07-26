@@ -3,6 +3,23 @@
 repeat task.wait() until game:IsLoaded() and game:GetService("ReplicatedStorage"):FindFirstChild("Library") and game.Players.LocalPlayer and game.Players.LocalPlayer.PlayerGui:FindFirstChild("Main") and game.Players.LocalPlayer.PlayerGui.Main:FindFirstChild("Right") and game.Players.LocalPlayer.Character
 print("loaded")
 
+--#region idk
+local InputService = game:GetService'UserInputService'
+local RunService   = game:GetService'RunService'
+
+RunService:Set3dRenderingEnabled(false)
+InputService.WindowFocused:Connect(function()
+    RunService:Set3dRenderingEnabled(true)
+end)
+
+InputService.WindowFocusReleased:Connect(function()
+    RunService:Set3dRenderingEnabled(false)
+end)
+setfpscap(30)
+
+wait(2)
+--#endregion
+
 getgenv().autoOrb = false
 getgenv().autoLaunch = false
 getgenv().autoView = false
