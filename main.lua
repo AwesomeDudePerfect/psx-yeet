@@ -27,6 +27,7 @@ getgenv().autoView = false
 getgenv().triple = false
 getgenv().octuple = false
 getgenv().hatch = false
+getgenv().disableEgg = false
 getgenv().EggName = nil
 getgenv().tpToEgg = false
 local newName
@@ -107,6 +108,10 @@ local EggSec = Eggs:NewSection("Hatching")
 
 EggSec:NewToggle("Start Hatching", "Auto hatches", function(v)
     getgenv().hatch = v
+end)
+
+EggSec:NewToggle("Disable Egg Animation", "Disables egg opening animation", function(v)
+        getgenv().disableEgg = v
 end)
 
 EggSec:NewToggle("Tp to egg", "Teleports to egg", function(v)
@@ -198,6 +203,27 @@ task.spawn(function()
             
             end
             Invoke("Buy Egg",getgenv().EggName,getgenv().triple,getgenv().octuple)
+        end
+    end
+end)
+
+local EggFunction
+task.spawn(function()
+    if getgenv().disableEgg then
+        for i,v in pairs(getgc(true)) do
+            if type(v) == "table" and rawget(v, "OpenEgg") then
+                EggFunction = v.OpenEgg
+                v.OpenEgg = function()
+                    return true
+                end
+            end
+        end
+    else
+        for i,v in pairs(getgc(true)) do
+            if type(v) == "table" and rawget(v, "OpenEgg") then
+                v.OpenEgg = EggFunction
+                EggFunction = nil
+            end
         end
     end
 end)
