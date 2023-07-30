@@ -39,14 +39,6 @@ for i,v in pairs(game.CoreGui:GetChildren()) do
     end
 end
 
-task.spawn(function()
-    game.Players.LocalPlayer.Idled:connect(function()
-        game:GetService("VirtualInputManager"):SendKeyEvent(true, "W", false, game)
-     wait()
-    game:GetService("VirtualInputManager"):SendKeyEvent(false, "W", false, game)
-    end)
-end)
-
 --#region var2
 
 local Network = require(game:GetService("ReplicatedStorage").Library.Client.Network)
