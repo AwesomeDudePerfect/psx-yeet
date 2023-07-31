@@ -4,18 +4,19 @@ repeat task.wait() until game:IsLoaded() and game:GetService("ReplicatedStorage"
 print("loaded")
 
 --#region idk
-local InputService = game:GetService'UserInputService'
-local RunService   = game:GetService'RunService'
+--local InputService = game:GetService'UserInputService'
+--local RunService   = game:GetService'RunService'
+    
+--RunService:Set3dRenderingEnabled(false)
+--InputService.WindowFocused:Connect(function()
+    --RunService:Set3dRenderingEnabled(true)
+--end)
+    
+--InputService.WindowFocusReleased:Connect(function()
+    --RunService:Set3dRenderingEnabled(false)
+--end)
+--setfpscap(30)
 
-RunService:Set3dRenderingEnabled(false)
-InputService.WindowFocused:Connect(function()
-    RunService:Set3dRenderingEnabled(true)
-end)
-
-InputService.WindowFocusReleased:Connect(function()
-    RunService:Set3dRenderingEnabled(false)
-end)
-setfpscap(30)
 
 wait(2)
 --#endregion
