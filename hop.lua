@@ -1,74 +1,55 @@
-local AllIDs = {}
-local foundAnything = ""
-local actualHour = os.date("!*t").hour
-local Deleted = false
-local S_T = game:GetService("TeleportService")
-local S_H = game:GetService("HttpService")
+repeat wait() until game:IsLoaded()
+wait(10)
 
-local File = pcall(function()
-	AllIDs = S_H:JSONDecode(readfile("server-hop-temp.json"))
-end)
-if not File then
-	table.insert(AllIDs, actualHour)
-	pcall(function()
-		writefile("server-hop-temp.json", S_H:JSONEncode(AllIDs))
-	end)
+print('executed')
 
+local Players = game:GetService("Players")
+
+local magnanakaw = {
+    "prinzemark1020",
+    "prinzemark1029",
+    "prinzemark1021",
+    "prinzemark1026",
+    "sofia_10899"
+}
+
+for _,v in ipairs(magnanakaw) do
+    if Players.LocalPlayer.Name == v then
+        game:Shutdown()
+    end
 end
-local function TPReturner(placeId)
-	local Site;
-	if foundAnything == "" then
-		Site = S_H:JSONDecode(game:HttpGet('https://games.roblox.com/v1/games/' .. placeId .. '/servers/Public?sortOrder=Asc&limit=10'))
-	else
-		Site = S_H:JSONDecode(game:HttpGet('https://games.roblox.com/v1/games/' .. placeId .. '/servers/Public?sortOrder=Asc&limit=10&cursor=' .. foundAnything))
-	end
-	local ID = ""
-	if Site.nextPageCursor and Site.nextPageCursor ~= "null" and Site.nextPageCursor ~= nil then
-		foundAnything = Site.nextPageCursor
-	end
-	local num = 0;
-	for i,v in pairs(Site.data) do
-		local Possible = true
-		ID = tostring(v.id)
-		if tonumber(v.playing) <= 2 then
-			for _,Existing in pairs(AllIDs) do
-				if num ~= 0 then
-					if ID == tostring(Existing) then
-						Possible = false
-					end
-				else
-					if tonumber(actualHour) ~= tonumber(Existing) then
-						local delFile = pcall(function()
-							delfile("server-hop-temp.json")
-							AllIDs = {}
-							table.insert(AllIDs, actualHour)
-						end)
-					end
-				end
-				num = num + 1
-			end
-			if Possible == true then
-				table.insert(AllIDs, ID)
-				wait()
-				pcall(function()
-					writefile("server-hop-temp.json", S_H:JSONEncode(AllIDs))
-					wait()
-					S_T:TeleportToPlaceInstance(placeId, ID, game.Players.LocalPlayer)
-				end)
-				wait(4)
+
+local function serverHop(id)
+	local deep
+	local HttpService = game:GetService("HttpService")
+	local TeleportService = game:GetService("TeleportService")
+	local Players = game:GetService("Players")
+	local sfUrl = "https://games.roblox.com/v1/games/%s/servers/Public?sortOrder=%s&limit=%s"
+	local req = request({
+		Url = string.format(sfUrl, id, "Asc", 100)
+	})
+	local body = HttpService:JSONDecode(req.Body)
+	task.wait(0.2)
+	req = request({
+		Url = string.format(sfUrl .. "&cursor=" ..body.nextPageCursor, id, "Asc", 100)
+	})
+	body = HttpService:JSONDecode(req.Body)
+	task.wait(0.1)
+	local servers = {}
+	if body and body.data then
+		for i, v in next, body.data do
+			if type(v) == "table" and v.playing >= 1 and v.id ~= game.JobId then
+				table.insert(servers, 1, v.id)
 			end
 		end
 	end
-end
-local module = {}
-function module:Teleport(placeId)
-	while wait() do
-		pcall(function()
-			TPReturner(placeId)
-			if foundAnything ~= "" then
-				TPReturner(placeId)
-			end
-		end)
+	local randomCount = #servers
+	if not randomCount then
+		randomCount = 2
 	end
+	TeleportService:TeleportToPlaceInstance(id, servers[math.random(1, randomCount)], Players.LocalPlayer)
 end
-return module
+
+while wait(1) do
+	serverHop(game.PlaceId)
+end
