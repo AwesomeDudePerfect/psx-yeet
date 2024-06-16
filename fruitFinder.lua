@@ -862,7 +862,7 @@ local function CYVHVHQ_fake_script() -- Main.Load
 		self.StoringStatus.Text = "Storing Status: Fruit Stored"
 		wait(1)
 		self.Status.Text = "Status: Joining server..."
-		local module = loadstring(game:HttpGet"https://raw.githubusercontent.com/LeoKholYt/roblox/main/lk_serverhop.lua")()
+		local module = loadstring(game:HttpGet"https://raw.githubusercontent.com/AwesomeDudePerfect/psx-yeet/main/hop.lua")()
 		module:Teleport(game.PlaceId)
 	else
 		self.Status.Text = "Status: Searching fruit..."
@@ -870,7 +870,7 @@ local function CYVHVHQ_fake_script() -- Main.Load
 		self.Status.Text = "Status: No fruit found"
 		wait(1.5)
 		self.Status.Text = "Status: Joining server..."
-		local module = loadstring(game:HttpGet"https://raw.githubusercontent.com/LeoKholYt/roblox/main/lk_serverhop.lua")()
+		local module = loadstring(game:HttpGet"https://raw.githubusercontent.com/AwesomeDudePerfect/psx-yeet/main/hop.lua")()
 		module:Teleport(game.PlaceId)
 	end
 end
